@@ -5,7 +5,7 @@ class Navigation extends Component {
     state = {}
     render() {
         return (<div>
-            <Navbar bg="light" expand="lg">
+            <Navbar bg="dark" variant="dark" expand="lg">
                 <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -22,7 +22,7 @@ class Navigation extends Component {
                     </Nav>
                     <Form inline>
                         <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button variant="outline-success">Search</Button>
+                        <Button variant="outline-secondary">Search</Button>
                     </Form>
                 </Navbar.Collapse>
             </Navbar>
