@@ -4,6 +4,8 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose")
+require('dotenv').config()
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
@@ -17,10 +19,12 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-
 // Define API routes here
+app.use("/user", require('./routes/users'))
 
+//Mongoose
 
+mongoose.connect("mongodb://localhost/project3")
 
 // Send every other request to the React app
 // Define any API routes before this runs

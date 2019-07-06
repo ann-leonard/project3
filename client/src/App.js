@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container'
 import Navigation from './components/Nav'
 import Foot from './components/Footer';
 import Welcome from './components/Welcome'
-import signIn from './components/signIn'
+import SignIn from './components/signIn'
 
 class App extends Component {
   
@@ -15,7 +15,6 @@ class App extends Component {
         <Navigation />
           <Container>
               <Welcome/>
-              <signIn />
           </Container>
         <Foot />
       </div>
