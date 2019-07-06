@@ -31,6 +31,7 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
+    "passport-jwt": "^4.0.0",
     "react-router-dom": "^5.0.1",
     "sweetalert2": "^8.13.1",
     "sweetalert2-react": "^0.8.2",
