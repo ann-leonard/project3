@@ -14,36 +14,43 @@ opts.secretOrKey = JWT_SECRET;
 console.log(opts)
 
 //JSON web tokens strategy 
-passport.use(new JwtStrategy(opts, 
-async (req, payload, done) => {
-    //console.log('here')
-    try {
-        // Find the user specified in token
-        const user = await User.findById(payload.sub);
+passport.use(new JwtStrategy(opts,
+    async (req, payload, done) => {
+        //console.log('here')
+        try {
+            // Find the user specified in token
+            const user = await User.findById(payload.sub);
 
-        // If user doesn't exists, handle it
-        if (!user) {
-            return done(null, false);
+            // If user doesn't exists, handle it
+            if (!user) {
+                return done(null, false);
+            }
+
+            // Otherwise, return the user
+            req.user = user;
+            done(null, user);
+        } catch (error) {
+            done(error, false);
         }
-
-        // Otherwise, return the user
-        req.user = user;
-        done(null, user);
-    } catch (error) {
-        done(error, false);
-    }
-}));
+    }));
 
 //Local Strategy 
 passport.use(new LocalStrategy({
-    usernameField:'email'
-}, async (email,password,done)=> {
-//find the user with given email
-const user = await User.findOne({email})
-//if none exists, handle it
-if (!user){ return done(null,false) }
-//check if password is correct
-
-//if not, handle it
-
+    usernameField: 'email'
+}, async (email, password, done) => {
+    //find the user with given email
+    try {
+        const user = await User.findOne({ email })
+        //if none exists, handle it
+        if (!user) { return done(null, false) }
+        //check if password is correct
+        const isValid = user.isValidPassword(password)
+        //if not, handle it
+        if (!isValid) {
+            done(null, false)
+        }
+        done(null, user)
+    }catch(err){
+        done(err, false)
+    }
 }))
