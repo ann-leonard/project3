@@ -40,15 +40,17 @@ passport.use(new LocalStrategy({
     passwordField: 'password'
 }, async (email, password, done) => {
     //find the user with given email
+    console.log('local')
     try {
         const user = await User.findOne({ email })
         //if none exists, handle it
         if (!user) { return done(null, false) }
         //check if password is correct
         console.log(user)
-        const validPassword = user.isValidPassword(password)
+        const validPassword = await user.isValidPassword(password)
         //if not, handle it
         if (!validPassword) {
+            console.log('passport.js says this password is NOT valid')
             return done(null, false)
         }
         return done(null, user)
