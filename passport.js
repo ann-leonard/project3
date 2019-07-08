@@ -36,7 +36,8 @@ passport.use(new JwtStrategy(opts,
 
 //Local Strategy 
 passport.use(new LocalStrategy({
-    usernameField: 'email'
+    usernameField: 'email',
+    passwordField: 'password'
 }, async (email, password, done) => {
     //find the user with given email
     try {
@@ -44,12 +45,13 @@ passport.use(new LocalStrategy({
         //if none exists, handle it
         if (!user) { return done(null, false) }
         //check if password is correct
-        const isValid = user.isValidPassword(password)
+        console.log(user)
+        const validPassword = user.isValidPassword(password)
         //if not, handle it
-        if (!isValid) {
-            done(null, false)
+        if (!validPassword) {
+            return done(null, false)
         }
-        done(null, user)
+        return done(null, user)
     }catch(err){
         done(err, false)
     }

@@ -34,7 +34,7 @@ module.exports = {
     },
     signin: async (req,res,next)=>{
         //generate token
-        console.log("signin function called!")
+        console.log('logged in')
     },
     secret: async (req,res,next)=>{
         console.log("secret function called!")
