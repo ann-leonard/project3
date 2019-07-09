@@ -1,10 +1,6 @@
 import React, { Component } from "react";
-import Container from 'react-bootstrap/Container'
-import Navigation from './components/Nav'
-import Foot from './components/Footer';
-import Welcome from './components/Welcome'
-import SignIn from './components/signIn'
-
+import Navigation from './components/Nav';
+import Footer from './components/Footer'
 class App extends Component {
   
 
@@ -13,10 +9,8 @@ class App extends Component {
     return (
       <div>
         <Navigation />
-          <Container>
-              <Welcome/>
-          </Container>
-        <Foot />
+        {this.props.children}
+        <Footer />
       </div>
     );
   }

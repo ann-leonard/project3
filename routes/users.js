@@ -9,9 +9,8 @@ router.route("/sign-up")
     .post(validateBody(schemas.authSchema),User.signup)
 
 router.route("/sign-in")
-    .post(validateBody(schemas.authSchema),passport.authenticate('local', { session : false }),User.signin)
+    .post(validateBody(schemas.authSchema),passport.authenticate('local', { session : false, successRedirect:'/user/dashboard' }),User.signin,)
 
-router.route("/secret")
-    .get(passport.authenticate('jwt',{ session : false }), User.secret)
+router.route("/dashboard").get(passport.authenticate('jwt',{ session : false }), User.secret)
 
 module.exports=router
