@@ -33,11 +33,12 @@ module.exports = {
         return res.status(200).json({token})
     },
     signin: async (req,res,next)=>{
-        //generate token
+        //generate token 
         const token = signToken(req.user)
+        //save user info to local storage to pull into frontend
         return res.status(200).json({token})
     },
-    secret: async (req,res,next)=>{
-        console.log("secret function called!")
+    dashboard: async (req,res,next)=>{
+        console.log(req.user)
     }
 }

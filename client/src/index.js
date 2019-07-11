@@ -5,13 +5,15 @@ import "./index.css";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import Home from "./pages/Home";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn"
+import SignUp from "./pages/SignUp"; 
+import SignIn from "./pages/SignIn";
+import Dashboard from "./pages/Dashboard"
 
 ReactDOM.render(
         <BrowserRouter>
             <App>
                 <Switch>
+                    <Route path="/user/dashboard" component={Dashboard} />
                     <Route path="/sign-in" component={SignIn} />
                     <Route path="/sign-up" component={SignUp} />
                     <Route path="/" component={Home} />

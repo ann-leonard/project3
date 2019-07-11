@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import post from '../utils/post'
+import Dashboard from '../pages/Dashboard'
 
 class SignInForm extends Component {
-    state = {
-        email:"",
-        password:""
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            email:"",
+            password:"",
+            isUser: false
+        }
+        // This binding is necessary to make `this` work in the callback
+
     }
 
     handleInputChange = event => {
@@ -19,12 +28,20 @@ class SignInForm extends Component {
       };
     
 
-    HandleSubmit = event => {
+    HandleSubmit = async event => {
         event.preventDefault();
-        post.signIn({email:this.state.email, password:this.state.password})
+        const response = await post.signIn({email:this.state.email, password:this.state.password})
+        console.log(response)
+        if (response.data.token){
+            this.setState({
+                isUser:true,
+                User: this.state.email
+            })
+        }
     }
 
     render() {
+        if (!this.state.isUser){
         return (<div>
             <Jumbotron className="m-5 p-5 col-sm-10 col-lg-8 mx-auto bg-secondary text-center light">
                 <h1 className="title">Log in</h1>
@@ -44,6 +61,11 @@ class SignInForm extends Component {
                 </Form>
             </Jumbotron>
         </div>);
+        }else{
+            return <Redirect to={{ pathname:'/user/dashboard', email:this.state.email }}render={<Dashboard/>} />
+
+        }
+    
     }
 }
 
