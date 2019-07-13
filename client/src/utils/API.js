@@ -3,9 +3,9 @@
 //creating these functions as post routes 
 //use these functions 
 
-var Axios = require('axios')
-const API_KEY = "TUNAL5398EVX0C8D" 
-
+const Axios = require('axios')
+const API_KEY = process.env.REACT_APP_API_KEY 
+const DataVis = require('./data/chart')
 
 module.exports = {
 
@@ -14,7 +14,8 @@ module.exports = {
     },
 
     dailyTimeSeries: function(SYMBOL){
-        Axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${SYMBOL}&apikey=${API_KEY}`)
+        //console.log(API_KEY)
+       return Axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${SYMBOL}&apikey=${API_KEY}`)
     }
 
 }

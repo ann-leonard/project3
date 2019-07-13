@@ -5,6 +5,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import API from '../utils/API'
+import DataVis from '../utils/data/chart'
 
 class SearchContainer extends Component {
     state = {}
@@ -25,14 +26,9 @@ class SearchContainer extends Component {
       };
 
     handleSearch = async () => {
-        try{
-            console.log(this.state.input)
-            let AVresult = await API.searchBySymbol(this.state.input)
-            console.log(AVresult)
-    
-        }catch(e){
-            console.log(e)
-        }
+       const AVresult = await API.dailyTimeSeries(this.state.input)
+       //console.log(AVresult)
+       DataVis.test(AVresult)
     }
 
     render() {
