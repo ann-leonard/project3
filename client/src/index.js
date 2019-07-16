@@ -7,12 +7,14 @@ import registerServiceWorker from "./registerServiceWorker";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp"; 
 import SignIn from "./pages/SignIn";
-import Dashboard from "./pages/Dashboard"
+import Dashboard from "./pages/Dashboard";
+import Details from "./pages/Details";
 
 ReactDOM.render(
         <BrowserRouter>
             <App>
                 <Switch>
+                    <Route path="/user/api/series/:id" component={Details}/>
                     <Route path="/user/dashboard" component={Dashboard} />
                     <Route path="/sign-in" component={SignIn} />
                     <Route path="/sign-up" component={SignUp} />

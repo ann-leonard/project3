@@ -7,7 +7,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import CardDeck from 'react-bootstrap/CardDeck'
 import Row from 'react-bootstrap/Row'
-//import Plot from 'react-plotly.js';
+import {Chart} from 'react-google-charts'
+import Details from '../pages/Details'
 import API from '../utils/API';
 import post from '../utils/post'
 import DataVis from '../utils/data/chart';
@@ -45,48 +46,50 @@ class SearchContainer extends Component {
         })
     }
 
-    getDetails =  event =>{
-       // console.log(event.target.name)
+    getDetails = event => {
+        // console.log(event.target.name)
         post.saveTimeSeries(event.target.name)
-        .then(this.setState({
-            saved: true
-        }))
-        console.log(this.state)
+            .then(this.setState({
+                stock: event.target.name,
+                saved:true
+            }))
     }
 
     render() {
-        if(!this.state.saved){
-        return (
-        <div>
-            <Container bg='dark' className="mx-auto">
-                <div className="d-flex flex-column mt-5">
-                    <InputGroup size="lg">
-                        <FormControl
-                            placeholder="Symbol or keyword"
-                            aria-describedby="basic-addon2"
-                            onChange={this.handleInputChange}
-                            name="input"
-                        />
-                        <InputGroup.Append>
-                            <ButtonGroup size="lg">
-                                <Button variant="info" name="bySymbol" onClick={this.handleSearch}>Search quotes by symbol</Button>
-                                <Button variant="info" name="byKeyword" onClick={this.handleOptions}>Search by keyword</Button>
-                            </ButtonGroup>
-                        </InputGroup.Append>
-                    </InputGroup>
-                    <Row className="mx-auto">
-                    <CardDeck className="justify-content-center">
-                        {this.state.result.map(result => (
-                        <ResultSymbol handleClick={this.getDetails} name={result["1. symbol"]} company={result["2. name"]} type={result["3. type"]} region={result["4. region"]} currency={result["8. currency"]}/>
-                    ))}
-                    </CardDeck>
-                    </Row>
-                </div>
-    
-            </Container>
-        </div>);
-        } else{
-            //render component with historical details/chart
+        if (!this.state.saved) {
+            return (
+                <div>
+                    <Container bg='dark' className="mx-auto">
+                        <div className="d-flex flex-column mt-5">
+                            <InputGroup size="lg">
+                                <FormControl
+                                    placeholder="Symbol or keyword"
+                                    aria-describedby="basic-addon2"
+                                    onChange={this.handleInputChange}
+                                    name="input"
+                                />
+                                <InputGroup.Append>
+                                    <ButtonGroup size="lg">
+                                        <Button variant="info" name="bySymbol" onClick={this.handleSearch}>Search quotes by symbol</Button>
+                                        <Button variant="info" name="byKeyword" onClick={this.handleOptions}>Search by keyword</Button>
+                                    </ButtonGroup>
+                                </InputGroup.Append>
+                            </InputGroup>
+                            <Row className="mx-auto">
+                                <CardDeck className="justify-content-center">
+                                    {this.state.result.map(result => (
+                                        <ResultSymbol handleClick={this.getDetails} name={result["1. symbol"]} company={result["2. name"]} type={result["3. type"]} region={result["4. region"]} currency={result["8. currency"]} />
+                                    ))}
+                                </CardDeck>
+                            </Row>
+                        </div>
+
+                    </Container>
+                </div>);
+        } else {
+            return (
+                <Redirect to={{pathname:`/user/api/series/${this.state.stock}`, stock:this.state.stock}} render={<Details />}/>
+            )
         }
     }
 }

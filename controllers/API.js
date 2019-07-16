@@ -21,12 +21,17 @@ module.exports = {
       //})
     },
 
-    dailyTimeSeries: function(req,res,next){
+    dailyTimeSeries: async function(req,res,next){
         console.log(req.body)
         const SYMBOL = req.body.data
         const API_KEY = process.env.API_KEY
+        const existingData = []
         console.log(SYMBOL)
         console.log(API_KEY)
+         Stock.find({symbol:SYMBOL}).then(function(res){
+             existingData.push(res)
+         })
+        if (!existingData){
          Axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${SYMBOL}&apikey=${API_KEY}`).then(function(res){
             let data = res.data["Time Series (Daily)"]
             data = Object.entries(data)
@@ -44,7 +49,16 @@ module.exports = {
             }
 
         })
-        return 0;
-    }
+        }    
+    }, 
 
+    getSeries: function(req,res,next){
+        console.log("gothere")
+        console.log(req.params.id)
+        console.log(req.body)
+        //return promise that queries database for info
+        Stock.find({symbol:`${req.params.id}`, timestamp: {$gte:new Date(req.body.startDate), $lte:new Date(req.body.endDate)}}).then(function(result){
+            res.json(result)
+        })
+    }
 }

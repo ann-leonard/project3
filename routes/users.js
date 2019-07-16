@@ -19,4 +19,6 @@ router.route("/dashboard").get(passport.authenticate('jwt', {session:false}),Use
 router.route("/api/save")
     .post(API.dailyTimeSeries)
 
+router.route("/api/series/:id").post(API.getSeries)
+
 module.exports=router

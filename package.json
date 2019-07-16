@@ -37,6 +37,8 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "plotly.js": "^1.48.3",
+    "plotly.js-basic-dist": "^1.48.3",
+    "react-google-charts": "^3.0.14",
     "react-plotly.js": "^2.3.0",
     "react-router-dom": "^5.0.1",
     "sweetalert2": "^8.13.1",

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const stockSchema = new Schema({
     symbol: {
         required:true,
-        type:String
+        type:String,
     },
     timestamp: {
         required:true,
@@ -31,6 +31,7 @@ const stockSchema = new Schema({
         type:Number
     }
 })
+
 
 const Stock = mongoose.model('stock', stockSchema)
 module.exports = Stock

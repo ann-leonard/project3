@@ -11,6 +11,11 @@ export default {
 
     saveTimeSeries: function(data){
         return axios.post('/user/api/save', {data})
+    },
+
+    getSeries: function(id,data){
+       // console.log(data)
+        return axios.post(`/user/api/series/${id}`, data)
     }
 
 }
