@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import API from '../utils/API'
-import DataVis from '../utils/data/chart'
+import CardDeck from 'react-bootstrap/CardDeck'
+import Row from 'react-bootstrap/Row'
+//import Plot from 'react-plotly.js';
+import API from '../utils/API';
+import post from '../utils/post'
+import DataVis from '../utils/data/chart';
+import ResultSymbol from '../components/resultCard'
+import Home from '../pages/Home'
 
+//Plot.name("test")
 class SearchContainer extends Component {
-    state = {}
+    state = {
+        result: [],
+        saved: false
+    }
 
     handleOptions = event => {
         let option = event.target.name
@@ -20,20 +31,34 @@ class SearchContainer extends Component {
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
-          [name]: value
+            [name]: value
         });
         console.log(this.state)
-      };
+    };
 
     handleSearch = async () => {
-       const AVresult = await API.dailyTimeSeries(this.state.input)
-       //console.log(AVresult)
-       DataVis.test(AVresult)
+        const symbolResult = await API.SymbolSearch(this.state.input)
+        const result = symbolResult.data.bestMatches
+        console.log(result)
+        this.setState({
+            result
+        })
+    }
+
+    getDetails =  event =>{
+       // console.log(event.target.name)
+        post.saveTimeSeries(event.target.name)
+        .then(this.setState({
+            saved: true
+        }))
+        console.log(this.state)
     }
 
     render() {
-        return (<div>
-            <Container bg='dark'>
+        if(!this.state.saved){
+        return (
+        <div>
+            <Container bg='dark' className="mx-auto">
                 <div className="d-flex flex-column mt-5">
                     <InputGroup size="lg">
                         <FormControl
@@ -43,17 +68,27 @@ class SearchContainer extends Component {
                             name="input"
                         />
                         <InputGroup.Append>
-                        <ButtonGroup size="lg">
-                            <Button variant="info" name="bySymbol" onClick={this.handleSearch}>Search quotes by symbol</Button>
-                            <Button variant="info" name="byKeyword" onClick={this.handleOptions}>Search by keyword</Button>
-                        </ButtonGroup>
+                            <ButtonGroup size="lg">
+                                <Button variant="info" name="bySymbol" onClick={this.handleSearch}>Search quotes by symbol</Button>
+                                <Button variant="info" name="byKeyword" onClick={this.handleOptions}>Search by keyword</Button>
+                            </ButtonGroup>
                         </InputGroup.Append>
                     </InputGroup>
+                    <Row className="mx-auto">
+                    <CardDeck className="justify-content-center">
+                        {this.state.result.map(result => (
+                        <ResultSymbol handleClick={this.getDetails} name={result["1. symbol"]} company={result["2. name"]} type={result["3. type"]} region={result["4. region"]} currency={result["8. currency"]}/>
+                    ))}
+                    </CardDeck>
+                    </Row>
                 </div>
-
+    
             </Container>
         </div>);
+        } else{
+            //render component with historical details/chart
         }
     }
-    
+}
+
 export default SearchContainer;

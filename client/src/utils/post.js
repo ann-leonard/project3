@@ -7,6 +7,10 @@ export default {
 
     signIn: function(data){
         return axios.post('/user/sign-in', data)
+    },
+
+    saveTimeSeries: function(data){
+        return axios.post('/user/api/save', {data})
     }
 
 }

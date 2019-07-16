@@ -3,7 +3,8 @@
 
 module.exports = {
     test: function({data}){
-        console.log(data["Time Series (Daily)"])
+        console.log(data)
+        //console.log(data["Time Series (Daily)"])
         let TSD = data['Time Series (Daily)']
         const dates = []
         const highs = []

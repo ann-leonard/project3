@@ -9,12 +9,12 @@ const DataVis = require('./data/chart')
 
 module.exports = {
 
-    searchBySymbol: function(SYMBOL){
-       return Axios.get(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${SYMBOL}&apikey=${API_KEY}`)
+    SymbolSearch: function(SYMBOL){
+       return Axios.get(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${SYMBOL}&apikey=${API_KEY}`)
     },
 
-    dailyTimeSeries: function(SYMBOL){
-        //console.log(API_KEY)
+    DailyTimeSeries: function(SYMBOL){
+       // console.log(SYMBOL)
        return Axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${SYMBOL}&apikey=${API_KEY}`)
     }
 

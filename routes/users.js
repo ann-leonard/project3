@@ -1,6 +1,7 @@
 const express = require('express');
 const router = require('express-promise-router')();
 const User = require('../controllers/users')
+const API = require('../controllers/API')
 const { validateBody, schemas } = require('../helpers/routeHelpers')
 const passport = require("passport")
 const passportConf = require('../passport')
@@ -14,5 +15,8 @@ router.route("/sign-in")
     })
 
 router.route("/dashboard").get(passport.authenticate('jwt', {session:false}),User.dashboard)
+
+router.route("/api/save")
+    .post(API.dailyTimeSeries)
 
 module.exports=router
