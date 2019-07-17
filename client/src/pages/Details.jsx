@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import { Chart } from 'react-google-charts';
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import Container from 'react-bootstrap/Container'
 import post from '../utils/post';
-import Plotly from "plotly.js-basic-dist";
-
-import createPlotlyComponent from "react-plotly.js/factory";
-const Plot = createPlotlyComponent(Plotly);
+import { Line } from "react-chartjs-2";
+import parse from 'url-parse';
+import Navigation from '../components/Nav';
 
 class Details extends Component {
     state = {
         symbol: this.props.location.stock,
         dayArr: [],
-        openArr: [],
-        closeArr: [],
-        highArr: [],
-        lowArr: []
+        data: {},
+        done: false
     }
 
     componentDidMount = async () => {
-        // console.log(this.state)
+         console.log("THIS FUNCTION GOT RAN")
+        const url = parse()
+        const symbol = url.toString().split("/")[6]
+        console.log(symbol)
         const dayArr = []
         const openArr = []
         const highArr = []
@@ -25,7 +26,8 @@ class Details extends Component {
         const closeArr = []
         const today = new Date()
         const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        const response = await post.getSeries(this.props.location.stock, { endDate: date, startDate: "2010-01-01" })
+        const response = await post.getSeries(symbol, { endDate: date, startDate: "2019-01-01" })
+        console.log(response)
         for (let i = 0; i < response.data.length; i++) {
             let data = response.data[i]
             let day = data.timestamp.split("T")[0]
@@ -34,68 +36,41 @@ class Details extends Component {
             let close = data.close
             let open = data.open
             dayArr.push(day)
+
             lowArr.push(low)
             highArr.push(high)
             closeArr.push(close)
             openArr.push(open)
         }
         this.setState({
-            dayArr,
-            lowArr,
-            highArr,
-            closeArr,
-            openArr
+            done: true,
+            data: {
+                labels: dayArr,
+                datasets: [
+                    {
+                        label: this.props.location.stock,
+                        backgroundColor: ("rgba(0,0,255,0.75)"),
+                        data: closeArr,
+                        showLines: false
+                    }
+                ]
+            }
         })
-        console.log(this.state)
-        //   post.getSeries(this.props.location.stock, {endDate:date, startDate:"2019-01-01"}).then(function(res){
-        //       console.log(res)
-        //   })
+
     }
 
     render() {
-        return (<Plot
-            data={[
-                {
-                    x: this.state.dayArr,
-                    close: this.state.closeArr,
-                    high: this.state.highArr,
-                    low: this.state.lowArr,
-                    open: this.state.lowArr,
-                    type: 'candlestick',
-                    decreasing: { line: { color: '#7F7F7F' } },
-                    increasing: { line: { color: '#17BECF' } },
-                    line: { color: 'rgba(31,119,180,1)' },
-                    xaxis: 'x',
-                    yaxis: 'y'
-
-                }
-            ]}
-            layout={{
-                dragmode: 'zoom',
-                margin: {
-                    r: 10,
-                    t: 25,
-                    b: 40,
-                    l: 60
-                },
-                showlegend: false,
-                xaxis: {
-                    autorange: true,
-                    domain: [0, 1],
-                   // range: ['2017-01-03 12:00', '2017-02-15 12:00'],
-                    //rangeslider: { range: ['2017-01-03 12:00', '2017-02-15 12:00'] },
-                    title: 'Date',
-                    type: 'date'
-                },
-                yaxis: {
-                    autorange: true,
-                    domain: [0, 1],
-                    //range: [114.609999778, 137.410004222],
-                    type: 'linear'
-                }
-            }}
-          />);
+        return (
+            <div>
+                <Navigation />
+                <Jumbotron fluid >
+                    <Container>
+                        <Line data={this.state.data} />
+                    </Container>
+                </Jumbotron>
+            </div>
+        );
     }
 }
 
-export default Details;
+export default Details; 

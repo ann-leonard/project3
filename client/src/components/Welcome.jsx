@@ -7,9 +7,10 @@ class Welcome extends Component {
         return (
         <div>
         <Jumbotron className="m-5 col-sm-10 col-lg-8 mx-auto bg-secondary text-center light">
-            <h1 className="title">Welcome to [project name]!</h1>
+            <img src="https://www.pngkey.com/png/detail/522-5227751_stocks-icon-png-stocks-icon.png" className="rounded-pill" alt=""/>
+            <h1>Welcome to stockUp</h1>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed consequat magna. Proin luctus turpis massa, a aliquet metus malesuada.
+               A simple way to research stock market data
             </p>
             <p className="mx-auto">
             
@@ -18,7 +19,7 @@ class Welcome extends Component {
            </p>
         </Jumbotron>
         </div>
-        )
+        ) 
     }
 }
 

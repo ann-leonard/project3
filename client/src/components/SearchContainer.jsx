@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -7,7 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import CardDeck from 'react-bootstrap/CardDeck'
 import Row from 'react-bootstrap/Row'
-import {Chart} from 'react-google-charts'
+import { Chart } from 'react-google-charts'
 import Details from '../pages/Details'
 import API from '../utils/API';
 import post from '../utils/post'
@@ -20,6 +20,12 @@ class SearchContainer extends Component {
     state = {
         result: [],
         saved: false
+    }
+
+    componentDidMount = () => {
+        console.log(this.props)
+        //sweet alert with instructions
+
     }
 
     handleOptions = event => {
@@ -46,13 +52,18 @@ class SearchContainer extends Component {
         })
     }
 
-    getDetails = event => {
+    getDetails = async event => {
         // console.log(event.target.name)
-        post.saveTimeSeries(event.target.name)
-            .then(this.setState({
+        //try {
+           post.saveTimeSeries(event.target.name)
+            .then(
+            this.setState({
                 stock: event.target.name,
-                saved:true
+                saved: true
             }))
+      //  }catch(err){
+        //    console.log(err)
+        //}
     }
 
     render() {
@@ -70,8 +81,7 @@ class SearchContainer extends Component {
                                 />
                                 <InputGroup.Append>
                                     <ButtonGroup size="lg">
-                                        <Button variant="info" name="bySymbol" onClick={this.handleSearch}>Search quotes by symbol</Button>
-                                        <Button variant="info" name="byKeyword" onClick={this.handleOptions}>Search by keyword</Button>
+                                        <Button variant="info" name="byKeyword" onClick={this.handleSearch}>Search by keyword</Button>
                                     </ButtonGroup>
                                 </InputGroup.Append>
                             </InputGroup>
@@ -88,10 +98,10 @@ class SearchContainer extends Component {
                 </div>);
         } else {
             return (
-                <Redirect to={{pathname:`/user/api/series/${this.state.stock}`, stock:this.state.stock}} render={<Details />}/>
+                <Redirect to={{ pathname: `/user/api/series/${this.state.stock}`, stock: this.state.stock }} render={Details} />
             )
         }
     }
 }
 
-export default SearchContainer;
+export default withRouter(SearchContainer);

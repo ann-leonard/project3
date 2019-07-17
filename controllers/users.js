@@ -1,6 +1,7 @@
 const JWT = require('jsonwebtoken')
 const User = require("../models/user")
 const { JWT_SECRET } = require("../config/index")
+const cookieParser = require('cookie-parser')
 
 signToken = (newUser) => {
     return token = JWT.sign({
@@ -29,16 +30,38 @@ module.exports = {
 
         //generate token
         const token = signToken(newUser)
+        res.cookie('access_token', token, {
+            maxAge: 3600,
+            httpOnly: true
+        })
         //respond with token
         return res.status(200).json({token})
     },
     signin: async (req,res,next)=>{
         //generate token 
         const token = signToken(req.user)
-        //save user info to local storage to pull into frontend
+        res.cookie('access_token', token, {
+            maxAge: 3600,
+            httpOnly: true
+        })
         return res.status(200).json({token})
     },
     dashboard: async (req,res,next)=>{
-        console.log(req.user)
+      //  console.log(req.user)
+    },
+    isUser: async (req,res,next) => {
+        const token = req.cookies.access_token
+        try{
+            const verified = JWT.verify(token, JWT_SECRET)
+            res.status(200).json(verified)
+
+        }catch(err){
+            res.status(401).json({error: err})
+        }
+    },
+    logout: async (req,res,next) => {
+            console.log(req.user)
+            res.clearCookie('access_token');
+            res.json({ success: true });
     }
 }

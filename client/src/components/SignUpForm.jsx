@@ -3,25 +3,91 @@ import Jumbotron from 'react-bootstrap/Jumbotron'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import post from '../utils/post'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { Alert, ButtonGroup } from 'react-bootstrap';
+
 
 class SignUpForm extends Component {
     state = {
-        email:"",
-        password:""
+        email: "",
+        password: "",
+        emailError: "",
+        display1: false,
+        display2: false
     }
 
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
-          [name]: value
+            [name]: value
         });
+        if (value) {
+            if (event.target.name === "email") {
+                this.setState({
+                    display1:false
+                })
+            } else if (event.target.name === "password") {
+                this.setState({
+                    display2:false
+                })
+            }
+        } else if (!value) {
+            if (event.target.name === "email") {
+                this.setState({
+                    emailError: "Email is Required",
+                    display1:true
+                })
+            } else if (event.target.name === "password") {
+                this.setState({
+                    passwordError: "Password is requried",
+                    display2:true
+                })
+            }
+        } else if(event.target.name === "password"){
+                if (value.length < 4){
+                    this.setState({
+                        passwordError: "Password must be 4 characters or more",
+                        display2:true
+                    })
+                }else{
+                    this.setState({
+                        display2:false
+                    })
+                }
+            }
+         
         console.log(this.state)
-      };
-    
+    };
 
-    HandleSubmit = event => {
+    validateEmail = email => {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+    HandleSubmit = async event => {
+        const MySwal = withReactContent(Swal)
         event.preventDefault();
-        post.createUser({email:this.state.email, password:this.state.password})
+        if(this.validateEmail(this.state.email)){
+            try{
+           const response = await post.createUser({ email: this.state.email, password: this.state.password })
+            MySwal.fire({
+                text: JSON.stringify(response) 
+            })
+            }catch(err){
+                MySwal.fire({
+                    text:JSON.stringify("Email already in use"),
+                    type: "error",
+                    title:"Oops!"
+                })
+            }   
+        }else{
+            MySwal.fire({
+                title: "Oops!",
+                text:"Please enter a valid email address",
+                type:"error"
+            })
+        }
     }
 
     render() {
@@ -32,18 +98,20 @@ class SignUpForm extends Component {
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control name="email" type="email" placeholder="Enter email" onChange={this.handleInputChange} />
-                        <Form.Text className="text-muted">
-                            We'll never share your email with anyone else.
-                        </Form.Text>
+                        <Alert variant="danger" show={this.state.display1}>{this.state.emailError}</Alert>
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control name="password" type="password" placeholder="Password" onChange={this.handleInputChange} />
+                        <Alert variant="danger" show={this.state.display2}>{this.state.passwordError}</Alert>
                     </Form.Group>
-                    <Button variant="primary" type="button" onClick={this.HandleSubmit}>
-                        Submit
-                    </Button>
+                    <ButtonGroup vertical>
+                        <Button size="lg" variant="info" type="button" onClick={this.HandleSubmit}>
+                            Submit
+                        </Button>
+                        <Button variant="outline-info" type="button" className="mt-2" href="/sign-in">Already a user? Sign in.</Button>
+                    </ButtonGroup>
                 </Form>
             </Jumbotron>
         </div>);
