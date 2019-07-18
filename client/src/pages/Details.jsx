@@ -5,51 +5,53 @@ import post from '../utils/post';
 import { Line } from "react-chartjs-2";
 import parse from 'url-parse';
 import Navigation from '../components/Nav';
+import StockData from '../components/StockData';
 
 class Details extends Component {
     state = {
-        symbol: this.props.location.stock,
+        symbol: '',
         dayArr: [],
         data: {},
-        done: false
+        done: false,
+        high: '',
+        low: '',
+        open: '',
+        close: '',
     }
 
     componentDidMount = async () => {
-         console.log("THIS FUNCTION GOT RAN")
+        console.log("THIS FUNCTION GOT RAN")
         const url = parse()
         const symbol = url.toString().split("/")[6]
         console.log(symbol)
         const dayArr = []
-        const openArr = []
-        const highArr = []
-        const lowArr = []
         const closeArr = []
         const today = new Date()
         const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         const response = await post.getSeries(symbol, { endDate: date, startDate: "2019-01-01" })
-        console.log(response)
+        const mostRecent = response.data.pop()
+
         for (let i = 0; i < response.data.length; i++) {
             let data = response.data[i]
             let day = data.timestamp.split("T")[0]
-            let low = data.low
-            let high = data.high
             let close = data.close
-            let open = data.open
             dayArr.push(day)
 
-            lowArr.push(low)
-            highArr.push(high)
             closeArr.push(close)
-            openArr.push(open)
         }
         this.setState({
+            symbol,
+            high: mostRecent.high,
+            low: mostRecent.low,
+            open: mostRecent.open,
+            close: mostRecent.close,
             done: true,
             data: {
                 labels: dayArr,
                 datasets: [
                     {
-                        label: this.props.location.stock,
-                        backgroundColor: ("rgba(0,0,255,0.75)"),
+                        label: symbol,
+                        backgroundColor: ("rgba(50,100,255,0.6)"),
                         data: closeArr,
                         showLines: false
                     }
@@ -63,11 +65,10 @@ class Details extends Component {
         return (
             <div>
                 <Navigation />
-                <Jumbotron fluid >
-                    <Container>
+                    <Container className="bg-dark">
+                        <StockData stock={this.state.symbol} high={this.state.high} low={this.state.low} close={this.state.close} open={this.state.open}/>
                         <Line data={this.state.data} />
                     </Container>
-                </Jumbotron>
             </div>
         );
     }

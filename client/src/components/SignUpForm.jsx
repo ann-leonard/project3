@@ -6,7 +6,7 @@ import post from '../utils/post'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { Alert, ButtonGroup } from 'react-bootstrap';
-
+import Dashboard from '../pages/Dashboard'
 
 class SignUpForm extends Component {
     state = {
@@ -14,7 +14,8 @@ class SignUpForm extends Component {
         password: "",
         emailError: "",
         display1: false,
-        display2: false
+        display2: false,
+        userCreated: false
     }
 
     handleInputChange = event => {
@@ -70,9 +71,15 @@ class SignUpForm extends Component {
         event.preventDefault();
         if(this.validateEmail(this.state.email)){
             try{
-           const response = await post.createUser({ email: this.state.email, password: this.state.password })
+            await post.createUser({ email: this.state.email, password: this.state.password })
             MySwal.fire({
-                text: JSON.stringify(response) 
+                type: 'success'
+            }).then(()=>{
+                
+                this.setState({
+                    userCreated: true
+                })
+               
             })
             }catch(err){
                 MySwal.fire({
@@ -91,6 +98,7 @@ class SignUpForm extends Component {
     }
 
     render() {
+        if(!this.state.userCreated){
         return (<div>
             <Jumbotron className="m-5 p-5 col-sm-10 col-lg-8 mx-auto bg-secondary text-center light">
                 <h1 className="title">Join us...</h1>
@@ -115,7 +123,10 @@ class SignUpForm extends Component {
                 </Form>
             </Jumbotron>
         </div>);
+    }else{
+        return <Dashboard />
     }
+}
 }
 
 export default SignUpForm;

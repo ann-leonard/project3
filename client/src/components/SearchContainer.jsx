@@ -18,6 +18,7 @@ import Home from '../pages/Home'
 //Plot.name("test")
 class SearchContainer extends Component {
     state = {
+        stock: "",
         result: [],
         saved: false
     }
@@ -53,14 +54,17 @@ class SearchContainer extends Component {
     }
 
     getDetails = async event => {
-        // console.log(event.target.name)
+       // console.log(event.target.name)
+        this.setState({
+            stock: event.target.name
+        })
         //try {
-           post.saveTimeSeries(event.target.name)
-            .then(
-            this.setState({
-                stock: event.target.name,
+        await post.saveTimeSeries(event.target.name)
+        
+            
+        this.setState({
                 saved: true
-            }))
+            })
       //  }catch(err){
         //    console.log(err)
         //}
