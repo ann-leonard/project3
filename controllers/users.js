@@ -41,13 +41,13 @@ module.exports = {
         //generate token 
         const token = signToken(req.user)
         res.cookie('access_token', token, {
-            maxAge: 3600,
             httpOnly: true
         })
         return res.status(200).json({token})
     },
     dashboard: async (req,res,next)=>{
-      //  console.log(req.user)
+        console.log("HELLO !!!!!!!!!!!!")
+        console.log(req.user, req.cookies.access_token)
     },
     isUser: async (req,res,next) => {
         const token = req.cookies.access_token
@@ -56,6 +56,7 @@ module.exports = {
             res.status(200).json(verified)
 
         }catch(err){
+          //  console.log(err)
             res.status(401).json({error: err})
         }
     },

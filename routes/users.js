@@ -14,7 +14,7 @@ router.route("/sign-in")
         console.log('hey there')
     })
 
-router.route("/dashboard").get(passport.authenticate('jwt', {session:false}),User.dashboard)
+router.route("/dashboard").get(passport.authenticate('jwt', {session:false}), User.dashboard)
 
 router.route("/api/save")
     .post(API.dailyTimeSeries)

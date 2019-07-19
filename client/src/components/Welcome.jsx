@@ -5,9 +5,9 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 class Welcome extends Component {
     render() {
         return (
-        <div>
+        <div className="m-5" >
         <Jumbotron className="m-5 col-sm-10 col-lg-8 mx-auto bg-secondary text-center light">
-            <img src="https://www.pngkey.com/png/detail/522-5227751_stocks-icon-png-stocks-icon.png" className="rounded-pill" alt=""/>
+            <img src="https://www.pngkey.com/png/detail/522-5227751_stocks-icon-png-stocks-icon.png" className="rounded-circle" alt=""/>
             <h1>Welcome to stockUp</h1>
             <p>
                A simple way to research stock market data

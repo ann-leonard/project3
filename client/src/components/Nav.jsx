@@ -14,8 +14,8 @@ class Navigation extends Component {
     render() {
         return (<div>
             <Navbar bg="dark" variant="dark" expand="lg">
-                <Navbar.Brand href="/user/dashboard">            
-                <img src="https://www.pngkey.com/png/detail/522-5227751_stocks-icon-png-stocks-icon.png" className="icon m-3 rounded-pill" alt=""/>
+                <Navbar.Brand href="/">            
+                <img src="https://www.pngkey.com/png/detail/522-5227751_stocks-icon-png-stocks-icon.png" className="icon m-3 rounded-circle" alt=""/>
                 StockUp
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
